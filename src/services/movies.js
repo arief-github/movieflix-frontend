@@ -36,4 +36,4 @@ class MovieDataService {
     }
 }
 
-module.exports = MovieDataService;
+export default new MovieDataService;
