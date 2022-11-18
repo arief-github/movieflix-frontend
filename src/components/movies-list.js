@@ -121,28 +121,23 @@ function MoviesList(props) {
 						</Col>
 					</Row>
 				</Form>
-				<Row>
-					{
-						movies.map((movie, index) => {
-							return (
-								<Col>
-									<Card style={{width: '18rem'}} key={index}>
-										<Card.Img src={movie.poster + "/100px180"}></Card.Img>
-										<Card.Body>
-											<Card.Title>{movie.title}</Card.Title>
-											<Card.Text>
-												Rating: {movie.rated}
-											</Card.Text>
-											<Card.Text>{movie.plot}</Card.Text>
-											<Card.Text>{movie.released}</Card.Text>
-											<Link to={"/movies" + movie._id}>View Reviews</Link>
-										</Card.Body>
-									</Card>
-								</Col>
-							)
-						})
-					}
-				</Row>
+				<Row> 
+				{movies.map((movie) =>{
+			          return(
+			            <Col>
+			              <Card className="MovieRow" style={{ width: '18rem' }}>
+			                {movie.poster ? <Card.Img src={movie.poster+"/100px180"} /> : <Card.Img style={{width:'50px'}}  />}
+			                <Card.Body>
+			                  <Card.Title>{movie.title}</Card.Title>
+			                  <Card.Text> Rating: {movie.rated}</Card.Text>
+			                  <Card.Text>{movie.plot}</Card.Text>
+			                  <Link to={"/movies/id/"+movie._id} >View Reviews</Link>
+			                </Card.Body>
+			              </Card>
+			             </Col>
+			            )
+			          })}
+			     </Row>
 			</Container>
 		</div>
     )

@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import React, { useState } from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
+import {Switch, Route, Routes, Link, NavLink } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // bootstrap component 
@@ -30,13 +30,12 @@ function App() {
     return (
       <div>
         <NavbarApp user={user}/> 
-
-        <Switch>
-          <Route exact path={["/", "/movies"]} component={MoviesList}></Route>
-          <Route path="/movies/:id/review" render={(props) => <AddReview {...props} user={user} />}></Route>
-          <Route path="/movies/:id" render={(props) => <Movie {...props} user={user} />}></Route>
-          <Route path="/login" render={(props) => <Login {...props} login={login}/>}></Route>
-        </Switch>   
+          <Routes>
+            <Route path='/' element={<MoviesList />} />
+            <Route path='/movies' element={<MoviesList />} />
+            <Route path='/movies/id/:id' element={<Movie render={(props)=>({...props})} user={user} />} />
+            <Route path='/movies/id/:id/review' element={<AddReview render={(props)=>({...props})} user={user} />} />
+          </Routes>    
       </div>
     );
 }
@@ -48,10 +47,10 @@ function NavbarApp({ user }) {
             <Navbar.Brand href="#home">MERN-FLIX</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="me-auto">
-                <Nav.Link>
-                  <Link to={"/movies"}>Movies</Link>
-                </Nav.Link>
+              <Nav className="mx-auto">
+                <NavLink to={"/movies"}>
+                  Movies
+                </NavLink>
                 <Nav.Link>
                   {
                     user ? (
