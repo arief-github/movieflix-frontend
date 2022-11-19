@@ -15,16 +15,31 @@ function MoviesList(props) {
     const [searchRating, setSearchRating] = useState("");
     const [ratings, setRatings] = useState(["All Ratings"]);
 
+    const [currentPage, setCurrentPage] = useState(0);
+    const [entriesPerPage, setEntriesPerPage] = useState(0);
+    const [currentPageMode, setCurrentPageMode] = useState('');
+
     useEffect(() => {
-        retrieveMovies();
-        retrieveRatings();
-    }, []);
+       retrieveMovies();
+       retrieveRatings();
+    }, [currentPage]);
+
+    useEffect(() => {
+    	retrieveNextPage();
+    }, [currentPageMode]);
+
+    useEffect(() => {
+        setCurrentPage(0);
+    }, [currentPageMode]);
 
     const retrieveMovies = () => {
-        MovieDataService.getAll()
+    	setCurrentPageMode('');
+        MovieDataService.getAll(currentPage)
             .then(response => {
                 console.log(response.data)
                 setMovies(response.data.movies)
+                setCurrentPage(response.data.page);
+                setEntriesPerPage(response.data.entries_per_page)
             })
             .catch(e => {
                 console.log(e)
@@ -43,6 +58,16 @@ function MoviesList(props) {
             })
     }
 
+    const retrieveNextPage = () => {
+        if (currentPageMode === 'findByTitle') {
+            findByTitle();
+        } else if (currentPageMode === 'findByRating') {
+            findByRating();
+        } else {
+            retrieveMovies();
+        }
+    }
+
     const onChangeSearchTitle = (event) => {
         setSearchTitle(event.target.value);
     }
@@ -51,7 +76,7 @@ function MoviesList(props) {
         setSearchRating(event.target.value);
     }
 
-    const find = (query, by) => {
+    const find = (query, by, currentPage) => {
         MovieDataService.find(query, by)
             .then((response) => {
                 console.log(response.data);
@@ -63,10 +88,12 @@ function MoviesList(props) {
     }
 
     const findByTitle = () => {
+    	setCurrentPageMode('findByTitle');
         find(searchTitle, "title")
     }
 
     const findByRating = () => {
+    	setCurrentPageMode('findByRating');
         if (searchRating === 'All Ratings') {
             retrieveMovies();
         } else {
@@ -138,6 +165,17 @@ function MoviesList(props) {
 			            )
 			          })}
 			     </Row>
+			     <br/>
+			     Showing page: {currentPage} / {entriesPerPage}
+			     {
+			     	currentPage < 0 ? <p> Tidak dapat menampilkan film, Indeks halaman lebih kecil dari 0 </p>  : null
+			     }
+			     <Button variant="link" onClick={() => {setCurrentPage(currentPage + 1)}}>
+			     	Next page
+			     </Button>
+			     <Button variant="link" onClick={() => {setCurrentPage(currentPage - 1)}}>
+			     	Previous page
+			     </Button>
 			</Container>
 		</div>
     )
