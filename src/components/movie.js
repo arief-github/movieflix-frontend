@@ -4,12 +4,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 // React Bootstrap Component
-import Card from 'react-bootstrap/Card';
-import Container from 'react-bootstrap/Container';
-import Image from 'react-bootstrap/Container';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Button from 'react-bootstrap/Button';
+import { Card, Container, Image, Col, Row, Button, Figure } from 'react-bootstrap';
 
 const Movie = (props) => {
 	const navigate = useNavigate();
@@ -40,9 +35,11 @@ const Movie = (props) => {
     return (
         <div>
         	<Container>
-        		<Row>
+        		<Row className="mt-4">
         			<Col>
-        				<Image src={movie.poster + "100px250"} fluid/>
+        				<Figure>
+                            <Figure.Image src={movie.poster + "/100px250"} fluid/>            
+                        </Figure>
         			</Col>
         			<Col>
         				<Card>
