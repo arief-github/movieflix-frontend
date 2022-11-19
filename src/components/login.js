@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 const Login = (props) => {
+	let navigate = useNavigate();
+
 	const [name, setName] = useState('');
 	const [id, setId] = useState('');
+	const [error, setError] = useState(null);
 
 	const onChangeName = (e) => {
 		const name = e.target.value;
@@ -17,8 +21,13 @@ const Login = (props) => {
 	}
 
 	const login = () => {
-		props.login({name: name, id: id});
-		props.history.push("");
+		if(name.length > 5 && id.length > 5) {
+			props.login({name: name, id: id});
+			navigate('/');
+		} else {
+			setError(1);
+			setTimeout(() => setError(null), 2000);
+		}
 	}
 
 	return (
@@ -45,11 +54,10 @@ const Login = (props) => {
 				<Button variant="primary" onClick={login}>
 					Submit
 				</Button>
+				{error && <p style={{color: 'red'}}>Please check your password and/or id</p>}
 			</Form>
 		</div>
 	)
-
-
 }
 
 export default Login;

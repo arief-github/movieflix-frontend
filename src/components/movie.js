@@ -9,6 +9,9 @@ import { Card, Container, Image, Col, Row, Button, Figure } from 'react-bootstra
 const Movie = (props) => {
 	const navigate = useNavigate();
 	const { id } = useParams();
+    const [style, setStyle] = useState({
+      textDecoration: 'none'
+    });
 
     const [movie, setMovie] = useState({
         id: null,
@@ -48,10 +51,7 @@ const Movie = (props) => {
         						<Card.Text>
         							{movie.plot}		
         						</Card.Text>
-        						{
-        							props.user && 
-        							<Link to={"/movies" + props.match.params.id + "/review"}> Add Review </Link>
-        						}	
+        						  {props.user && <Link style={style} onMouseOut={()=>setStyle({textDecoration:'none'})} onMouseOver={()=>setStyle({textDecoration:'underline'})} to={"/movies/id/" + id + "/review"}> Add Review </Link>}
         					</Card.Body>
         				</Card>
         				<br></br>
