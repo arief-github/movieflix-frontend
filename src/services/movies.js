@@ -36,4 +36,4 @@ class MovieDataService {
     }
 }
 
-export default new MovieDataService;
+export default new MovieDataService();
