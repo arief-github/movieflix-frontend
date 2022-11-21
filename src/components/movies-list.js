@@ -19,50 +19,49 @@ function MoviesList(props) {
     const [entriesPerPage, setEntriesPerPage] = useState(0);
     const [currentPageMode, setCurrentPageMode] = useState('');
 
+
+    const retrieveMovies = () => {
+        setCurrentPageMode('');
+        MovieDataService.getAll(currentPage)
+            .then(response => {
+                console.log(response.data)
+                setMovies(response.data.movies)
+                setCurrentPage(response.data.page);
+                setEntriesPerPage(response.data.entries_per_page)
+            })
+            .catch(e => {
+                console.log(e)
+            })
+    }
+
+
+    const retrieveRatings = () => {
+        MovieDataService.getRatings()
+            .then((response) => {
+                console.log(response.data);
+                setRatings(["All Ratings"].concat(response.data))
+            })
+            .catch((e) => {
+                console.log(e);
+            })
+    }
+
+    const retrieveNextPage = () => {
+        if (currentPageMode === 'findByTitle') {
+            findByTitle();
+        } else if (currentPageMode === 'findByRating') {
+            findByRating();
+        } else {
+            retrieveMovies();
+        }
+    }
+
     useEffect(() => {
-
-        const retrieveMovies = () => {
-            setCurrentPageMode('');
-            MovieDataService.getAll(currentPage)
-                .then(response => {
-                    console.log(response.data)
-                    setMovies(response.data.movies)
-                    setCurrentPage(response.data.page);
-                    setEntriesPerPage(response.data.entries_per_page)
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-        }
-
-
-        const retrieveRatings = () => {
-            MovieDataService.getRatings()
-                .then((response) => {
-                    console.log(response.data);
-                    setRatings(["All Ratings"].concat(response.data))
-                })
-                .catch((e) => {
-                    console.log(e);
-                })
-        }
-
         retrieveMovies();
         retrieveRatings();
     }, []);
 
     useEffect(() => {
-        const retrieveNextPage = () => {
-            if (currentPageMode === 'findByTitle') {
-                findByTitle();
-            } else if (currentPageMode === 'findByRating') {
-                findByRating();
-            } else {
-                retrieveMovies();
-            }
-        }
-
-
         retrieveNextPage();
     }, [currentPageMode]);
 
